@@ -1,10 +1,14 @@
 var express = require("express");
 
-var bookRouter = require("./book");
+var HospitalRouter = require("./hospital");
+var PharmacyRouter = require("./pharmacy");
+var BloodRouter = require("./blood");
 
 var app = express();
 
 
-app.use("/book/", bookRouter);
+app.use("/hospital/", HospitalRouter);
+app.use("/pharmacy/", PharmacyRouter);
+app.use("/blood/", BloodRouter);
 
 module.exports = app;

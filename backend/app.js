@@ -13,6 +13,7 @@ var MONGODB_URL = process.env.MONGODB_URL;
 var mongoose = require("mongoose");
 const DB = 'mongodb+srv://fasih:fasih123@cluster0.rnhle3d.mongodb.net/?retryWrites=true&w=majority'
 mongoose.set('strictQuery', true);
+
 mongoose.connect(DB)
     .then(() => {
         console.log("DB is connected");
