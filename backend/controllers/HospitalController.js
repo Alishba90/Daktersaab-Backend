@@ -9,7 +9,7 @@ var mongoose = require("mongoose");
 
 
 // Hospital Schema
-function hospitalData(data) {
+function HospitalData(data) {
 
     this.Name =data.Name;
 	this.Location =data.Location;
@@ -38,7 +38,7 @@ exports.HospitalDetail = [
 		try {
 			Hospital.findOne({Name:req.params.Name,Location:req.params.Location}).then((hospital)=>{                
 				if(hospital !== null){
-					let hospitalData = new hospitalData(hospital);
+					let hospitalData = new HospitalData(hospital);
                     var doctors=Doctor.docterList(hospital);
                     if (doctors!==null){
                         return apiResponse.successResponseWithData(res, "Operation success", hospitalData=hospitalData,doctorData=doctors);            
@@ -110,8 +110,8 @@ exports.addHospital = [
 				//Save book.
 				hospital.save(function (err) {
 					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let HospitalData = new HospitalData(hospital);
-					return apiResponse.successResponseWithData(res,"Hospital added successfully.", HospitalData);
+					let hospitalData = new HospitalData(hospital);
+					return apiResponse.successResponseWithData(res,"Hospital added successfully.", hospitalData);
 				});
 			}
 		} catch (err) {
