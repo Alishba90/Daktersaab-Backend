@@ -73,8 +73,8 @@ exports.addHospital = [
     body("Password", "Password should be atleast of 8 characters").isLength({ min: 8 }).trim(),
     body("Password").custom((value)=>{
 
-        if(/[A-Z]/.test(value)){
-            
+        if(!value.match(/"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"/)){
+            return Promise.reject("Password must contain one lowercase one uppercase one special character and a number");
             }
         }),
 
