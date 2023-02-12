@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const validator=require("validator");
 
 var hospitalSchema = new mongoose.Schema({
-	
+	ObjectId:mongoose.Schema.ObjectId,
 	Name: {type: String, required: true},
 	Location: {type: String, required: true},
 	Email: {type: String, required: false , validate:{

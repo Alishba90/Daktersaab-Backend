@@ -71,12 +71,7 @@ exports.addHospital = [
 	body("Email", "Please provide your email").isLength({ min: 1 }).trim(),
     body("Phone", "Please provide your contact number").isLength({ min: 1 }).trim(),
     body("Password", "Password should be atleast of 8 characters").isLength({ min: 8 }).trim(),
-    body("Password").custom((value)=>{
 
-        if(!value.match(/"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"/)){
-            return Promise.reject("Password must contain one lowercase one uppercase one special character and a number");
-            }
-        }),
 
 	body("Location", "Location must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
 		return Hospital.findOne({Location : value,Name: req.Name}).then(hospital => {
@@ -86,12 +81,13 @@ exports.addHospital = [
             
 		});
 	}),
+
 	
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
 			var hospital = new Hospital(
-				{ 
+				{   ObjectId:new mongoose.Types.ObjectId(),
                     Name:req.body.Name,
 	                Location:req.body.Location,
                     Email:req.body.Email,

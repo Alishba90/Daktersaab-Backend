@@ -1,5 +1,5 @@
 const Doctor = require("../models/DoctorModel");
-const Hospital= require('../models/Hospital')
+const Hospital= require('../models/HospitalModel')
 const { body,validationResult } = require("express-validator");
 
 const apiResponse = require("../helpers/apiResponse");
@@ -28,10 +28,10 @@ function DoctorData(data) {
 
 function HospitalID(name,location){
 		Hospital.find({Name:name,Location:location}.then((hospital)=>{
-			if(hospital){return hospital.id}
+			if(hospital){return hospital.ObjectId}
 			else{ 
 				console.log("no such hospital");
-				return null;
+				return apiResponse.ErrorResponse(res, "No such Hospital exist");
 			}
 	}))
 }
@@ -73,16 +73,10 @@ exports.docterList = [
  */
 exports.addDoctors = [
 	
+	body("Name", "Name must not be empty.").isLength({ min: 1 }).trim(),
+	body("Field", "Field must not be empty.").isLength({ min: 1 }).trim(),
+	body("ConsultancyFees", "Please enter fees for the doctor.").isLength({ min: 1 }).trim(),
 
-	body("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
-	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
-	body("isbn", "ISBN must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Book.findOne({isbn : value,user: req.user._id}).then(book => {
-			if (book) {
-				return Promise.reject("Book already exist with this ISBN no.");
-			}
-		});
-	}),
 	
 	(req, res) => {
 
@@ -117,7 +111,7 @@ exports.addDoctors = [
 				doctor.save(function (err) {
 					if (err) { return apiResponse.ErrorResponse(res, err); }
 					let doctorData = new DoctorData(doctor);
-					return apiResponse.successResponseWithData(res,"Doctor added Success.", doctorData);
+					return apiResponse.successResponseWithData(res,"Doctor added Successfly.", doctorData);
 				});
 			}
 		} catch (err) {
@@ -148,7 +142,7 @@ exports.delDoctor = [
 					return apiResponse.notFoundResponse(res,"No such doctor exists");
 				}else{
 					
-						//delete book.
+						//delete doctor.
 						Doctor.remove({Name:req.params.Name,Hospital:hospitalID,Field:req.params.Field},function (err) {
 							if (err) { 
 								return apiResponse.ErrorResponse(res, err); 
