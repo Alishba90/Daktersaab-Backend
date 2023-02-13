@@ -1,11 +1,7 @@
 const Hospital = require("../models/HospitalModel");
 const Doctor = require("./DoctorController");
-
-
-
 const apiResponse = require("../helpers/apiResponse");
 
-var mongoose = require("mongoose");
 
 
 // Hospital Schema
@@ -20,9 +16,6 @@ function HospitalData(data) {
 	
     
 }
-
-
-
 
 /**
  * Hospital Detail.
@@ -67,23 +60,13 @@ exports.HospitalDetail = [
  */
 
 
-function validating(req){Hospital.findOne({Location : req.body.location,Name: req.body.name}).then(hospital => {
-			if (hospital) {
-				return Promise.reject("Hospital already exist with this location");
-			}
-else{return null}
-            
-		});
-}
+
 exports.addHospital = [
 	
-
-
-
-async	(req, res) => {
-		try {
-console.log("i recieved",req.body)
-			const errors = validating(req);
+	(req, res) => {
+		
+            
+	
 			var hospital = new Hospital(
 				{   
                     Name:req.body.name,
@@ -95,28 +78,27 @@ console.log("i recieved",req.body)
                     
 
 				});
-
-			if (errors) {
-                
-				return apiResponse.validationErrorWithData(res, "Validation Error.", errors);
-
-			}
-			else {
-				//Save book.
+            Hospital.findOne({Location : req.body.location,Name: req.body.name}).then(h => {
+			if (h) {
+				return res.status(430).send({ error: "Hospital already exist" });
+			}else{ 
+            
+		
+			
+				//register hospital
                 try {
-                        await hospital.save();
-                        console.log("registered doctor")
+                        hospital.save();
+                        
                         res.send({message: "Donor Registered Successfully"});
                     } catch (err) {
                         console.log("db error", err);
                         return res.status(422).send({ error: err.message });
                     }
+            }
+            
 				
-			}
-		} catch (err) {
-			//throw error in json response with status 500. 
-			return apiResponse.ErrorResponse(res, err);
-		}
+			});
+		
 	}
 ];
 
