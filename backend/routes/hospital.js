@@ -6,7 +6,7 @@ var router = express.Router();
 
 
 router.get("/:Name/:Location", HospitalController.HospitalDetail);
-router.post("/", HospitalController.addHospital);
+router.post("/add", HospitalController.addHospital);
 
 router.delete("/:Name/:Location", HospitalController.delHospital);
 

@@ -1,7 +1,7 @@
 const Hospital = require("../models/HospitalModel");
 const Doctor = require("./DoctorController");
 
-const { body,validationResult } = require("express-validator");
+
 
 const apiResponse = require("../helpers/apiResponse");
 
@@ -10,15 +10,15 @@ var mongoose = require("mongoose");
 
 // Hospital Schema
 function HospitalData(data) {
-
+    
     this.Name =data.Name;
 	this.Location =data.Location;
 	this.Email=data.Email;
 	this.Password =data.Password;
 	this.Phone1=data.Phone1;
 	this.Phone2 =data.Phone2;
-	this.Timings =data.Timings;
-    this.UpdatedDate=data.UpdatedDate;
+	
+    
 }
 
 
@@ -65,50 +65,53 @@ exports.HospitalDetail = [
  * 
  * @returns {Object}
  */
-exports.addHospital = [
-	
-	body("Name", "Name must not be empty.").isLength({ min: 1 }).trim(),
-	body("Email", "Please provide your email").isLength({ min: 1 }).trim(),
-    body("Phone", "Please provide your contact number").isLength({ min: 1 }).trim(),
-    body("Password", "Password should be atleast of 8 characters").isLength({ min: 8 }).trim(),
 
 
-	body("Location", "Location must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Hospital.findOne({Location : value,Name: req.Name}).then(hospital => {
+function validating(req){Hospital.findOne({Location : req.body.location,Name: req.body.name}).then(hospital => {
 			if (hospital) {
 				return Promise.reject("Hospital already exist with this location");
 			}
+else{return null}
             
 		});
-	}),
-
+}
+exports.addHospital = [
 	
-	(req, res) => {
+
+
+
+async	(req, res) => {
 		try {
-			const errors = validationResult(req);
+console.log("i recieved",req.body)
+			const errors = validating(req);
 			var hospital = new Hospital(
-				{   ObjectId:new mongoose.Types.ObjectId(),
-                    Name:req.body.Name,
-	                Location:req.body.Location,
-                    Email:req.body.Email,
-                    Password:req.body.Password,
-                    Phone1:req.body.Phone1,
-                    Phone2 :req.body.Phone2,
-                    Timings:req.body.Timings,
-                    UpdatedDate:req.body.UpdatedDate,
+				{   
+                    Name:req.body.name,
+	                Location:req.body.location,
+                    Email:req.body.email,
+                    Password:req.body.password,
+                    Phone1:(req.body.phone1.toString()),
+                    Phone2 :(req.body.phone2.toString()),
+                    
 
 				});
 
-			if (!errors.isEmpty()) {
-				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+			if (errors) {
+                
+				return apiResponse.validationErrorWithData(res, "Validation Error.", errors);
+
 			}
 			else {
 				//Save book.
-				hospital.save(function (err) {
-					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let hospitalData = new HospitalData(hospital);
-					return apiResponse.successResponseWithData(res,"Hospital added successfully.", hospitalData);
-				});
+                try {
+                        await hospital.save();
+                        console.log("registered doctor")
+                        res.send({message: "Donor Registered Successfully"});
+                    } catch (err) {
+                        console.log("db error", err);
+                        return res.status(422).send({ error: err.message });
+                    }
+				
 			}
 		} catch (err) {
 			//throw error in json response with status 500. 
@@ -143,7 +146,7 @@ exports.delHospital = [
 								return apiResponse.successResponse(res,"Hospital removed successfully.");
 							}
 						});
-                        Doctor.Doctor.remove({Hospital:hospital.ObjectId})
+                        Doctor.Doctor.remove({Hospital:hospital})
                         
 				}
 			});

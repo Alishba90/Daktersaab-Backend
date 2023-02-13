@@ -7,8 +7,8 @@ var BloodRouter = require("./blood");
 var app = express();
 
 
-app.use("/hospital/", HospitalRouter);
-app.use("/pharmacy/", PharmacyRouter);
-app.use("/blood/", BloodRouter);
+app.use("/hospital", HospitalRouter);
+app.use("/pharmacy", PharmacyRouter);
+app.use("/blood", BloodRouter);
 
 module.exports = app;

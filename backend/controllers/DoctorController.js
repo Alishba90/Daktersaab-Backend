@@ -14,6 +14,7 @@ function DoctorData(data) {
 	this.Field= data.Field;
 	this.ConsultancyFees = data.ConsultancyFees;
 	this.Hospital = data.Hospital;
+	this.Branch =data.Branch;
 	this.Ratings=data.Ratings;
 	this.Speciality=data.Speciality;
 	this.Monday = data.Monday;
@@ -26,15 +27,7 @@ function DoctorData(data) {
 
 }
 
-function HospitalID(name,location){
-		Hospital.find({Name:name,Location:location}.then((hospital)=>{
-			if(hospital){return hospital.ObjectId}
-			else{ 
-				console.log("no such hospital");
-				return apiResponse.ErrorResponse(res, "No such Hospital exist");
-			}
-	}))
-}
+
 			
 
 
@@ -47,7 +40,7 @@ exports.docterList = [
 	
 	function (hospital) {
 		try {
-			Doctor.find({Hospital: hospital._id}).then((doctors)=>{
+			Doctor.find({Hospital: hospital.Name , Branch:hospital.Location}).then((doctors)=>{
 				if(doctors.length > 0){
 					return doctors;
 				}else{
@@ -80,7 +73,8 @@ exports.addDoctors = [
 	
 	(req, res) => {
 
-		let hospitalID=HospitalID(req.params.Hospital,req.params.Location);
+		let hospitalName=req.params.Hospital;
+		let Branch=req.params.Location;
 		req.data.forEach(doc => {
 			
 		
@@ -91,7 +85,8 @@ exports.addDoctors = [
 					Name :doc.Name,
 					Field:doc.Field,
 					ConsultancyFees :doc.ConsultancyFees,
-					Hospital :hospitalID,
+					Hospital :hospitalName,
+					Branch:Branch,
 					Ratings:doc.Ratings,
 					Speciality:doc.Speciality,
 					Monday :doc.Monday,
@@ -136,14 +131,15 @@ exports.delDoctor = [
 
 		try {
 
-			let hospitalID=HospitalID(req.params.Hospital,req.params.Location);
-			Doctor.find({Name:req.params.Name,Hospital:hospitalID,Field:req.params.Field}, function (err, doctor) {
+			let hospitalName=req.params.Hospital;
+			let Branch=req.params.Location;
+			Doctor.find({Name:req.params.Name,Hospital:hospitalName,Branch:Branch,Field:req.params.Field}, function (err, doctor) {
 				if(doctor === null){
 					return apiResponse.notFoundResponse(res,"No such doctor exists");
 				}else{
 					
 						//delete doctor.
-						Doctor.remove({Name:req.params.Name,Hospital:hospitalID,Field:req.params.Field},function (err) {
+						Doctor.remove({Name:req.params.Name,Hospital:hospitalName, Branch:Branch,Field:req.params.Field},function (err) {
 							if (err) { 
 								return apiResponse.ErrorResponse(res, err); 
 							}else{

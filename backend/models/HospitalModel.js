@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const validator=require("validator");
 
 var hospitalSchema = new mongoose.Schema({
-	ObjectId:mongoose.Schema.ObjectId,
+	
+
 	Name: {type: String, required: true},
 	Location: {type: String, required: true},
 	Email: {type: String, required: false , validate:{
@@ -12,18 +13,14 @@ var hospitalSchema = new mongoose.Schema({
       isAsync: false
     }},
 	Password: {type: String, required: false},
-	Phone1: {type: Number, required: true},
-	Phone2: {type: Number, required: false},
-	Timings:[{day:String,open:String,close:String}],
+	Phone1: {type: String, required: true},
+	Phone2: {type: String, required: false},
+	
 	UpdatedDate:{type:Date, default:Date.now()}
 }, {timestamps: true});
 
 // Virtual for hospital and its branch
-hospitalSchema
-	.virtual("fullName")
-	.get(function () {
-		return this.Name + " " + this.Location;
-	});
+
 
 hospitalSchema.pre('save',async function(next){
     const hospital= this;
