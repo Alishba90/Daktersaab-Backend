@@ -17,13 +17,7 @@ function DoctorData(data) {
 	this.Branch =data.Branch;
 	this.Ratings=data.Ratings;
 	this.Speciality=data.Speciality;
-	this.Monday = data.Monday;
-	this.Tuesday = data.Tuesday;
-	this.Wednesday = data.Wednesday;
-	this.Thursday = data.Thursday;
-	this.Friday = data.Friday;
-	this.Saturday = data.Saturday;
-	this.Sunday = data.Sunday;
+	this.Timings=data.Timings;
 
 }
 
@@ -80,6 +74,7 @@ exports.addDoctors = [
 		
 		try {
 			const errors = validationResult(req);
+			
 			var doctor = new Doctor(
 				{ 
 					Name :doc.Name,
@@ -89,13 +84,16 @@ exports.addDoctors = [
 					Branch:Branch,
 					Ratings:doc.Ratings,
 					Speciality:doc.Speciality,
-					Monday :doc.Monday,
-					Tuesday:doc.Tuesday,
-					Wednesday:doc.Wednesday,
-					Thursday:doc.Thursday,
-					Friday :doc.Friday,
-					Saturday:doc.Saturday,
-					Sunday:doc.Sunday,
+					Timings:{
+						Monday :doc.Monday,
+						Tuesday:doc.Tuesday,
+						Wednesday:doc.Wednesday,
+						Thursday:doc.Thursday,
+						Friday :doc.Friday,
+						Saturday:doc.Saturday,
+						Sunday:doc.Sunday
+					}
+					
 				});
 
 			if (!errors.isEmpty()) {

@@ -13,7 +13,8 @@ function HospitalData(data) {
 	this.Password =data.Password;
 	this.Phone1=data.Phone1;
 	this.Phone2 =data.Phone2;
-	
+	this.Photos=data.Photos;
+	this.Time=data.Time;
     
 }
 
@@ -24,6 +25,28 @@ function HospitalData(data) {
  * 
  * @returns {Object}
  */
+
+exports.HospitalBranches=[
+	function(req,res){
+		try{
+			Hospital.find({Name:req.params.Name}).then((hospital)=>{
+			if(!hospital.length){
+				let hospitalData =new HospitalData(hospital);
+				let branches=[]
+				hospitalData.forEach(h => {
+					branches.push(h.Location)
+				});
+				return apiResponse.successResponseWithData(res,"Hospitals available for this name ",branches=branches)
+			}	
+		}			
+			)}
+		catch(err){
+			//throw error in json response with status 500. 
+			return apiResponse.ErrorResponse(res, err);
+		}
+}
+
+]
 exports.HospitalDetail = [
 	
 	function (req, res) {
@@ -75,7 +98,8 @@ exports.addHospital = [
                     Password:req.body.password,
                     Phone1:(req.body.phone1.toString()),
                     Phone2 :(req.body.phone2.toString()),
-                    
+                    Time:req.body.time,
+					Photos:req.body.photos
 
 				});
             Hospital.findOne({Location : req.body.location,Name: req.body.name}).then(h => {
@@ -89,7 +113,7 @@ exports.addHospital = [
                 try {
                         hospital.save();
                         
-                        res.send({message: "Donor Registered Successfully"});
+                        res.send({message: "Hospital Registered Successfully"});
                     } catch (err) {
                         console.log("db error", err);
                         return res.status(422).send({ error: err.message });

@@ -11,6 +11,8 @@ var hospitalSchema = new mongoose.Schema({
       message: '{VALUE} is not a valid email',
       isAsync: false
     }},
+    Time: {type: String,},
+    Photos: {type: [String]},
 	Password: {type: String, required: true},
 	Phone1: {type: String, required: true},
 	Phone2: {type: String, required: false},

@@ -10,14 +10,17 @@ var doctorSchema = new Schema({
     Hospital:{type: String, required: true},
     Branch:{type: String, required: true},
     Ratings:{type: Number, default:1, min:0, max:5},
-	Monday: {type: String, required: false},
-	Tuesday:{type: String, required: false},
-    Wednesday:{type: String, required: false},
-    Thursday:{type: String, required: false},
-    Friday:{type: String, required: false},
-    Saturday:{type: String, required: false},
-    Sunday:{type: String, required: false}
-    
+    Timings:{
+        Monday: {type: String, required: false},
+        Tuesday:{type: String, required: false},
+        Wednesday:{type: String, required: false},
+        Thursday:{type: String, required: false},
+        Friday:{type: String, required: false},
+        Saturday:{type: String, required: false},
+        Sunday:{type: String, required: false}
+    },
+/*	Comments:[{Name:{type:String},Comment:{type: String}}]
+  */  
 }, {timestamps: true});
 
 module.exports =new mongoose.model("Doctor", doctorSchema);
