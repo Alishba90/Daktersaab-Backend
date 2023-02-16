@@ -11,12 +11,15 @@ var hospitalSchema = new mongoose.Schema({
       message: '{VALUE} is not a valid email',
       isAsync: false
     }},
-    Time: {type: String,},
+    Time: {
+        Open: {type: String, required: false},
+        Close: {type: String, required: false},
+    },
     Photos: {type: [String]},
 	Password: {type: String, required: true},
 	Phone1: {type: String, required: true},
 	Phone2: {type: String, required: false},
-
+    Department:[{ type : String}]
 }, {timestamps: true})
 
 // Virtual for hospital and its branch
@@ -25,13 +28,12 @@ var hospitalSchema = new mongoose.Schema({
 hospitalSchema.pre('save', async function(next){
     const hospital= this;
     
-    console.log('before hashing',hospital.Password);
     if(!hospital.isModified('Password')){
         return next();
     }
     
     hospital.Password = await bcrypt.hash(hospital.Password, 8);
-    console.log('after hashing', hospital.Password);
+
     next();
 })
 

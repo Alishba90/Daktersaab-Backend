@@ -104,7 +104,7 @@ exports.addDoctors = [
 				doctor.save(function (err) {
 					if (err) { return apiResponse.ErrorResponse(res, err); }
 					let doctorData = new DoctorData(doctor);
-					return apiResponse.successResponseWithData(res,"Doctor added Successfly.", doctorData);
+					return apiResponse.successResponseWithData(res,"Doctor added Successfully.", doctorData);
 				});
 			}
 		} catch (err) {

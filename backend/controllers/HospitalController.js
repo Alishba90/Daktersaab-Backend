@@ -15,7 +15,7 @@ function HospitalData(data) {
 	this.Phone2 =data.Phone2;
 	this.Photos=data.Photos;
 	this.Time=data.Time;
-    
+    this.Department=data.Department
 }
 
 /**
@@ -27,17 +27,26 @@ function HospitalData(data) {
  */
 
 exports.HospitalBranches=[
-	function(req,res){
+
+async	function(req,res){
 		try{
-			Hospital.find({Name:req.params.Name}).then((hospital)=>{
-			if(!hospital.length){
-				let hospitalData =new HospitalData(hospital);
-				let branches=[]
-				hospitalData.forEach(h => {
-					branches.push(h.Location)
-				});
-				return apiResponse.successResponseWithData(res,"Hospitals available for this name ",branches=branches)
-			}	
+			
+		await	Hospital.find({Name:req.params.Name}).then((hospital)=>{
+			let branches=[]
+				
+			if(hospital.length>1){
+				
+				for (var i =0;i<hospital.length;i++){
+				
+				let hospitalData =new HospitalData(hospital[i]);
+				
+				branches.push(hospitalData.Location)
+				}
+				
+				return res.status(200).send({ branches:branches });
+				
+				
+			}else{return res.status(440).send({ error: "no branches" });}	
 		}			
 			)}
 		catch(err){
@@ -47,6 +56,7 @@ exports.HospitalBranches=[
 }
 
 ]
+
 exports.HospitalDetail = [
 	
 	function (req, res) {
@@ -98,9 +108,9 @@ exports.addHospital = [
                     Password:req.body.password,
                     Phone1:(req.body.phone1.toString()),
                     Phone2 :(req.body.phone2.toString()),
-                    Time:req.body.time,
-					Photos:req.body.photos
-
+                    Time:{Open:req.body.timings.open,Close:req.body.timings.close},
+					Photos:req.body.photos,
+					Department:req.body.department
 				});
             Hospital.findOne({Location : req.body.location,Name: req.body.name}).then(h => {
 			if (h) {

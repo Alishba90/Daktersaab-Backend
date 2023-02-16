@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+var mongoose = require("mongoose");
 const BloodBankSchema = new mongoose.Schema({
   Name: {
     type: String,
@@ -35,5 +35,4 @@ const BloodBankSchema = new mongoose.Schema({
 
 
 });
-
-export default mongoose.model("BloodBank", BloodBankSchema)
+module.exports = new mongoose.model("BloodBank", BloodBankSchema)

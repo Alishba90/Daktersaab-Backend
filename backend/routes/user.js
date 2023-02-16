@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt');
 var dotenv = require('dotenv')
 const Hospital = require("../models/HospitalModel");
 
-const apiResponse = require("../helpers/apiResponse");
+
 const BloodBank=require('../models/BloodModel')
 var router = express.Router();
 
@@ -12,8 +12,9 @@ var router = express.Router();
 dotenv.config();
 
 let organization ='';
-router.post("/login", async (req, res) => {
+router.post("/user", async (req, res) => {
   const { name,branch, password , org} = req.body;
+console.log("the request is ",req.body)
   if (!name ||!branch || !password ||!org) {
     return res.status(401).json({ error: "please enter valid credentials" });
   }
@@ -21,6 +22,7 @@ router.post("/login", async (req, res) => {
     if (org==='blood'){organization=BloodBank;}
     else if  (org==='pharmacy'){organization=Pharmacy;}
     else {organization=Hospital;}
+
 
   const savedUser = await organization.findOne({ Name: name , Location:branch  });
   if (!savedUser) {
@@ -31,7 +33,7 @@ router.post("/login", async (req, res) => {
       if (result) {
         console.log("password matched!");
         const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET_JWT);
-        return res.status(200).json({ token:token });
+        return res.status(200).json({ user:savedUser });
         
       } else {
         return res.status(430).json({ error: "Please enter valid password" });

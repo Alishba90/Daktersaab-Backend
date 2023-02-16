@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+var mongoose = require("mongoose");
 const PharmacySchema = new mongoose.Schema({
   Name: {
     type: String,
@@ -28,5 +28,4 @@ const PharmacySchema = new mongoose.Schema({
 
 
 });
-
-export default mongoose.model("Pharmacy", PharmacySchema)
+module.exports = new mongoose.model("Pharmacy", PharmacySchema)

@@ -23,4 +23,4 @@ var doctorSchema = new Schema({
   */  
 }, {timestamps: true});
 
-module.exports =new mongoose.model("Doctor", doctorSchema);
+module.exports =new mongoose.model("DDoctor", doctorSchema);
