@@ -19,8 +19,9 @@ var doctorSchema = new Schema({
         Saturday:{type: String, required: false},
         Sunday:{type: String, required: false}
     },
-/*	Comments:[{Name:{type:String},Comment:{type: String}}]
-  */  
+    TotalToken:{type:Number, required:true},
+    Comments:[{Name:{type:String},Comment:{type: String}}],
+    BookedToken:{type:Number, required:true},
 }, {timestamps: true});
 
 module.exports =new mongoose.model("DDoctor", doctorSchema);

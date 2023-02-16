@@ -19,7 +19,10 @@ var hospitalSchema = new mongoose.Schema({
 	Password: {type: String, required: true},
 	Phone1: {type: String, required: true},
 	Phone2: {type: String, required: false},
-    Department:[{ type : String}]
+    Department:[{
+        Name:{type:String},Phone:{type:String},Password:{type:String}
+    }],
+    MasterSecret:{type:String}
 }, {timestamps: true})
 
 // Virtual for hospital and its branch
