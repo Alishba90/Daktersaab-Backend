@@ -31,10 +31,12 @@ exports.HospitalBranches=[
 async	function(req,res){
 		try{
 			
+
 		await	Hospital.find({Name:req.params.Name}).then((hospital)=>{
+
 			let branches=[]
 				
-			if(hospital.length>1){
+			if(hospital.length>0){
 				
 				for (var i =0;i<hospital.length;i++){
 				
