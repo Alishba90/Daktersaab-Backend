@@ -99,11 +99,12 @@ exports.HospitalDetail = [
 exports.addHospital = [
 	
 	(req, res) => {
+console.log('this is recieve',req.body.department)
 			let dep=[]
-            for (var i=0;i<req.body.department;i++){
-				dep.push({Name:req.body.department[i],Phone:'',Password:''})
+            for (var i=0;i<req.body.department.length;i++){
+				dep.push({"Name":req.body.department[i],"Phone":'',"Password":''})
 			}
-	
+	console.log(dep)
 			var hospital = new Hospital(
 				{   
                     Name:req.body.name,
