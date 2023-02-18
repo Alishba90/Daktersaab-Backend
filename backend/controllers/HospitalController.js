@@ -97,8 +97,10 @@ exports.HospitalDetail = [
 exports.addHospital = [
 	
 	(req, res) => {
-		
-            
+			let dep=[]
+            for (var i=0;i<req.body.department;i++){
+				dep.push({Name:req.body.department[i],Phone:'',Password:''})
+			}
 	
 			var hospital = new Hospital(
 				{   
@@ -110,7 +112,7 @@ exports.addHospital = [
                     Phone2 :(req.body.phone2.toString()),
                     Time:{Open:req.body.timings.open,Close:req.body.timings.close},
 					Photos:req.body.photos,
-					Department:{Name:req.body.department,Phone:'',Password:''}
+					Department:dep
 				});
             Hospital.findOne({Location : req.body.location,Name: req.body.name}).then(h => {
 			if (h) {
