@@ -84,17 +84,6 @@ exports.HospitalDetail = [
 	}
 ];
 
-/**
- * Add Hospital.
- * 
- * @param {string}      title 
- * @param {string}      description
- * @param {string}      isbn
- * 
- * @returns {Object}
- */
-
-
 
 exports.addHospital = [
 	
@@ -141,6 +130,24 @@ console.log('this is recieve',req.body.department)
 	}
 ];
 
+exports.departValid = [
+	function (req,res){
+		try{
+
+			Hospital.find({Name:req.body.Name,Location:req.body.Location},function(err,hospital){
+			if(hospital.length){
+				var filtered=hospital.Department.filter(item => ((item.Name === req.body.deptname) && (item.Password===req.body.deptpass||req.bodey.deptpass==='masterkey')))
+				if(filtered.length){return res.status(200).send({ message: 'You are successfully logged in ' });}
+				else{return  res.status(440).send({ error: "Invalid Password" })}
+				
+
+			}else{
+				return apiResponse.notFoundResponse(res,"No such Hospital exists");
+			}
+		})
+		}catch(err){console.log(err)}
+	}
+]
 
 /**
  * Hospital Delete.
@@ -159,7 +166,7 @@ exports.delHospital = [
 					return apiResponse.notFoundResponse(res,"No such Hospital exists");
 				}else{
 					
-						//delete book.
+						
 						Hospital.remove({Name:req.params.Name,Location:req.params.Location},function (err) {
 							if (err) { 
 								return apiResponse.ErrorResponse(res, err); 
