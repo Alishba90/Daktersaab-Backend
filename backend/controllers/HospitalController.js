@@ -136,10 +136,17 @@ exports.departValid = [
 
 			Hospital.find({Name:req.body.Name,Location:req.body.Location},function(err,hospital){
 			if(hospital.length){
-				var filtered=hospital.Department.filter(item => ((item.Name === req.body.deptname) && (item.Password===req.body.deptpass||req.bodey.deptpass==='masterkey')))
-				if(filtered.length){return res.status(200).send({ message: 'You are successfully logged in ' });}
-				else{return  res.status(440).send({ error: "Invalid Password" })}
 				
+				
+				var arr= [hospital[0].Department]
+				console.log('the dep is' , arr)
+				var filtered;
+				arr[0].map((row,index)=>{ 
+					if( ((row.Name === req.body.deptname) && (row.Password===req.body.deptpass||req.body.deptpass==='masterkey'))){ filtered= row}})
+				console.log('filteres',filtered)
+				if(filtered){return res.status(200).send({ Department:filtered });}
+				else{return  res.status(440).send({ error: "Invalid Password" })}
+
 
 			}else{
 				return apiResponse.notFoundResponse(res,"No such Hospital exists");
